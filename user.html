@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Chave</title>
+</head>
+<body>
+    <h1>Área do Usuário</h1>
+    <label for="userName">Digite seu nome:</label>
+    <input type="text" id="userName" placeholder="Seu nome">
+    <button id="solicitarChaveBtn">Solicitar Chave</button>
+    <p id="chaveExibida">Aguardando chave...</p>
+
+    <script>
+        document.getElementById("solicitarChaveBtn").addEventListener("click", function() {
+            const nome = document.getElementById("userName").value;
+            if (nome) {
+                // Simulando o envio do pedido para o "backend" com LocalStorage
+                const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+                pedidos.push({ nome: nome, chave: "" });
+                localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+                alert("Pedido de chave enviado!");
+            } else {
+                alert("Por favor, digite seu nome.");
+            }
+        });
+
+        // Função para o usuário ver sua chave (simulado via LocalStorage)
+        function verificarChave() {
+            const nome = document.getElementById("userName").value;
+            const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+            const pedido = pedidos.find(p => p.nome === nome);
+
+            if (pedido && pedido.chave) {
+                document.getElementById("chaveExibida").innerText = "Sua chave: " + pedido.chave;
+            } else {
+                document.getElementById("chaveExibida").innerText = "Aguardando chave...";
+            }
+        }
+
+        // Atualiza automaticamente se a chave for atribuída
+        setInterval(verificarChave, 3000);
+    </script>
+</body>
+</html>
