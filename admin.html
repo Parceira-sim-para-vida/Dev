@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Administrador</title>
+</head>
+<body>
+    <h1>Área do Administrador</h1>
+    <div id="listaUsuarios"></div>
+
+    <script>
+        // Função para exibir os usuários que solicitaram uma chave
+        function carregarPedidos() {
+            const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+            const listaUsuarios = document.getElementById("listaUsuarios");
+            listaUsuarios.innerHTML = "";
+
+            pedidos.forEach((pedido, index) => {
+                const div = document.createElement("div");
+                div.innerHTML = `
+                    <p>Usuário: ${pedido.nome}</p>
+                    <input type="text" id="chave-${index}" placeholder="Digite a chave para ${pedido.nome}">
+                    <button onclick="enviarChave(${index})">Enviar Chave</button>
+                    <hr>
+                `;
+                listaUsuarios.appendChild(div);
+            });
+        }
+
+        // Função para o administrador enviar a chave e remover o usuário da lista
+        function enviarChave(index) {
+            const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+            const chave = document.getElementById(`chave-${index}`).value;
+
+            if (chave) {
+                // Enviar a chave ao usuário
+                pedidos[index].chave = chave;
+
+                // Atualizar o LocalStorage com a chave do usuário
+                localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+                alert("Chave enviada para " + pedidos[index].nome);
+
+                // Remover o usuário da lista após o envio da chave
+                pedidos.splice(index, 1);
+
+                // Atualizar o LocalStorage com o usuário removido
+                localStorage.setItem("pedidos", JSON.stringify(pedidos));
+
+                // Recarregar a lista de usuários
+                carregarPedidos();
+            } else {
+                alert("Por favor, digite uma chave.");
+            }
+        }
+
+        // Carregar pedidos ao abrir a página
+        window.onload = carregarPedidos;
+    </script>
+</body>
+</html>
+  
