@@ -28,28 +28,14 @@
             });
         }
 
-        // Função para o administrador enviar a chave e remover o usuário da lista
+        // Função para o administrador enviar a chave
         function enviarChave(index) {
             const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
             const chave = document.getElementById(`chave-${index}`).value;
-
             if (chave) {
-                // Enviar a chave ao usuário
                 pedidos[index].chave = chave;
-
-                // Atualizar o LocalStorage com a chave do usuário
                 localStorage.setItem("pedidos", JSON.stringify(pedidos));
-
                 alert("Chave enviada para " + pedidos[index].nome);
-
-                // Remover o usuário da lista após o envio da chave
-                pedidos.splice(index, 1);
-
-                // Atualizar o LocalStorage com o usuário removido
-                localStorage.setItem("pedidos", JSON.stringify(pedidos));
-
-                // Recarregar a lista de usuários
-                carregarPedidos();
             } else {
                 alert("Por favor, digite uma chave.");
             }
@@ -60,4 +46,3 @@
     </script>
 </body>
 </html>
-  
