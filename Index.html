@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sim ou Não</title>
     <style>
+        /* Seus estilos existentes */
         body {
             display: flex;
+          
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -14,6 +17,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+            position: relative;
         }
 
         .container {
@@ -66,7 +70,6 @@
             font-weight: bold;
         }
 
-        /* Popup original */
         .popup {
             display: none;
             position: fixed;
@@ -111,7 +114,6 @@
             z-index: 9;
         }
 
-        /* Novo popup para imagem */
         .image-popup {
             display: none;
             position: fixed;
@@ -133,19 +135,73 @@
             height: auto;
         }
 
-        /* Simulador de mouse */
-        .mouse-simulator {
+        .image-popup button {
+            margin: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 1em;
+        }
+
+        #change-image1 {
+            background-color: black; /* Azul */
+        }
+
+        #change-image2 {
+            background-color: black; /* Amarelo */
+        }
+
+        .custom-cursor {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-image: url('https://i.ibb.co/xJzHTGV/cursor.png');
+            background-size: cover;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+        }
+
+        .touchpad {
             display: none;
             position: fixed;
-            bottom: 10px;
-            right: 10px;
-            width: 50px;
-            height: 50px;
-            background: url('https://www.pngkit.com/png/full/103-1035411_mouse-pointer.png') no-repeat center center;
-            background-size: contain;
-            z-index: 11;
-            pointer-events: none;
+            bottom: 60px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 2px solid #333;
+            z-index: 1001;
+            overflow: hidden;
+            touch-action: none;
         }
+
+        .touchpad .touch-area {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .touchpad {
+                display: block;
+            }
+        }
+        
+      
+   #instagram-link {
+        text-decoration: none; /* Remove o sublinhado do link */
+    }
+    #instagram-handle {
+        font-weight: bold;
+        color: #0095f6; /* Cor típica dos links do Instagram */
+    }
+
+
     </style>
 </head>
 <body>
@@ -161,46 +217,93 @@
         <p><a id="instagram-link">Baixar o código e enviar por whats!</a></p>
     </footer>
 
-    <!-- Overlay usado para ambos os popups -->
     <div class="overlay" id="overlay"></div>
 
-    <!-- Popup original -->
     <div class="popup" id="popup">
         <h2>Enviar mensagem no Instagram</h2>
         <p>Manda uma mensagem para a conta no Instagram com a hashtag <strong>#download</strong> para baixar o código e poder compartilhar pelo whats</p>
         <button id="confirm-button">Confirmar</button>
     </div>
 
-    <!-- Novo popup para exibir apenas a imagem -->
     <div class="image-popup" id="image-popup">
-        <img src="https://via.placeholder.com/400x300" alt="Imagem">
+        <img id="popup-image" src="https://i.ibb.co/7Kp9jbR/buzz-1.jpg" alt="Imagem">
+        <div>
+            <button id="change-image1">NEGATIVO</button>
+            <button id="change-image2">POSITIVO</button>
+      <center>
+    <p>
+        Segue no Insta 
+        <a id="instagram-link" target="_blank">
+            <span id="instagram-handle">@clipsbyte</span>
+        </a> 
+        para mais projetos
+    </p>
+</center>
+
+
+</div>
     </div>
 
-    <!-- Simulador de mouse -->
-    <div class="mouse-simulator" id="mouse-simulator"></div>
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <div class="touchpad" id="touchpad">
+        <div class="touch-area" id="touch-area"></div>
+    </div>
 
     <script>
         const naoButton = document.getElementById('nao');
+        const simButton = document.getElementById('sim');
         const instagramLink = document.getElementById('instagram-link');
         const popup = document.getElementById('popup');
         const overlay = document.getElementById('overlay');
         const confirmButton = document.getElementById('confirm-button');
         const imagePopup = document.getElementById('image-popup');
-        const mouseSimulator = document.getElementById('mouse-simulator');
+        const popupImage = document.getElementById('popup-image');
+        const customCursor = document.getElementById('custom-cursor');
+        const touchpad = document.getElementById('touchpad');
+        const touchArea = document.getElementById('touch-area');
+        const changeImage1 = document.getElementById('change-image1');
+        const changeImage2 = document.getElementById('change-image2');
 
-        naoButton.addEventListener('mouseover', () => {
-            naoButton.textContent = 'Sim';
-            naoButton.style.backgroundColor = '#28a745'; // Verde
+        function updateButtonState(x, y) {
+            const naoRect = naoButton.getBoundingClientRect();
+            const simRect = simButton.getBoundingClientRect();
+            if (x >= naoRect.left && x <= naoRect.right && y >= naoRect.top && y <= naoRect.bottom) {
+                naoButton.textContent = 'Sim';
+                naoButton.style.backgroundColor = '#28a745';
+            } else if (x >= simRect.left && x <= simRect.right && y >= simRect.top && y <= simRect.bottom) {
+                simButton.style.backgroundColor = '#218838'; // Tom mais escuro de verde
+                imagePopup.style.display = 'block';
+                overlay.style.display = 'block';
+            } else {
+                naoButton.textContent = 'Não';
+                naoButton.style.backgroundColor = '#dc3545';
+                simButton.style.backgroundColor = '#28a745';
+            }
+        }
+
+        function updateCursorPosition(x, y) {
+            customCursor.style.left = `${x}px`;
+            customCursor.style.top = `${y}px`;
+            updateButtonState(x, y);
+        }
+
+        touchArea.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = touchpad.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            const cursorX = touchX * (window.innerWidth / touchpad.offsetWidth);
+            const cursorY = touchY * (window.innerHeight / touchpad.offsetHeight);
+            updateCursorPosition(cursorX, cursorY);
         });
 
-        naoButton.addEventListener('mouseleave', () => {
-            naoButton.textContent = 'Não';
-            naoButton.style.backgroundColor = '#dc3545'; // Vermelho
+        naoButton.addEventListener('click', () => {
+            // Adicione a funcionalidade desejada para o botão "Não"
         });
 
-        naoButton.addEventListener('click', () => {});
-
-        document.getElementById('sim').addEventListener('click', () => {
+        simButton.addEventListener('click', () => {
             imagePopup.style.display = 'block';
             overlay.style.display = 'block';
         });
@@ -212,7 +315,7 @@
         });
 
         confirmButton.addEventListener('click', () => {
-            window.open('https://www.instagram.com', '_blank');
+            window.open('https://www.instagram.com/clipsbyte?igsh=ejNqd2Z5NnQ3c2ht', '_blank');
             popup.style.display = 'none';
             overlay.style.display = 'none';
         });
@@ -223,15 +326,53 @@
             overlay.style.display = 'none';
         });
 
-        // Detecta se o usuário está em um dispositivo móvel
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-            mouseSimulator.style.display = 'block';
+        changeImage1.addEventListener('click', () => {
+            popupImage.src = 'https://i.ibb.co/syKQMLN/fetchimage-1.jpg'; // Imagem para NEGATIVO
+        });
 
-            document.addEventListener('mousemove', (e) => {
-                mouseSimulator.style.left = `${e.clientX + 10}px`;
-                mouseSimulator.style.top = `${e.clientY + 10}px`;
-            });
+        changeImage2.addEventListener('click', () => {
+            popupImage.src = 'https://i.ibb.co/CKVksD7/fetchimage.jpg'; // Imagem para POSITIVO
+        });
+
+        touchArea.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const now = Date.now();
+            const timeDiff = now - lastTouchTime;
+
+            if (timeDiff < doubleTapThreshold) {
+                const rect = touchpad.getBoundingClientRect();
+                const touch = e.touches[0];
+                const touchX = touch.clientX - rect.left;
+                const touchY = touch.clientY - rect.top;
+                const cursorX = touchX * (window.innerWidth / touchpad.offsetWidth);
+                const cursorY = touchY * (window.innerHeight / touchpad.offsetHeight);
+ 
+                updateCursorPosition(cursorX, cursorY);
+            }
+
+            lastTouchTime = now;
+        });
+
+        let lastTouchTime = 0;
+        const doubleTapThreshold = 300;
+
+        if (window.matchMedia('(max-width: 768px)').matches) {
+            touchpad.style.display = 'block';
+        } else {
+            touchpad.style.display = 'none';
         }
-    </script>
+        
+        
+       
+   
+    var encodedUrl = 'aHR0cHM6Ly93d3uaW5zdGFncmFtLmNvbS9jbGlwcy9pZ3NoPWVKcTdnM2NodHM=';
+    try {
+        var decodedUrl = atob(encodedUrl); 
+        document.getElementById('instagram-link').href = decodedUrl;
+    } catch (e) {
+        console.error('Erro ao decodificar a URL:', e);
+    }
+       </script>
 </body>
 </html>
+    
