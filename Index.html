@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sim ou Não</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .phrase {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #sim {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #nao {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 2px;
+            color: black;
+        }
+
+        footer a {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Popup original */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            width: 60%;
+        }
+
+        .popup h2 {
+            margin-bottom: 10px;
+        }
+
+        .popup button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            opacity: 0.9;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 9;
+        }
+
+        /* Novo popup para imagem */
+        .image-popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            width: 80%;
+        }
+
+        .image-popup img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Simulador de mouse */
+        .mouse-simulator {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            background: url('https://www.pngkit.com/png/full/103-1035411_mouse-pointer.png') no-repeat center center;
+            background-size: contain;
+            z-index: 11;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="phrase">Você é Gay?</div>
+        <div class="buttons">
+            <button id="sim">Sim</button>
+            <button id="nao">Não</button>
+        </div>
+    </div>
+
+    <footer>
+        <p><a id="instagram-link">Baixar o código e enviar por whats!</a></p>
+    </footer>
+
+    <!-- Overlay usado para ambos os popups -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Popup original -->
+    <div class="popup" id="popup">
+        <h2>Enviar mensagem no Instagram</h2>
+        <p>Manda uma mensagem para a conta no Instagram com a hashtag <strong>#download</strong> para baixar o código e poder compartilhar pelo whats</p>
+        <button id="confirm-button">Confirmar</button>
+    </div>
+
+    <!-- Novo popup para exibir apenas a imagem -->
+    <div class="image-popup" id="image-popup">
+        <img src="https://via.placeholder.com/400x300" alt="Imagem">
+    </div>
+
+    <!-- Simulador de mouse -->
+    <div class="mouse-simulator" id="mouse-simulator"></div>
+
+    <script>
+        const naoButton = document.getElementById('nao');
+        const instagramLink = document.getElementById('instagram-link');
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+        const confirmButton = document.getElementById('confirm-button');
+        const imagePopup = document.getElementById('image-popup');
+        const mouseSimulator = document.getElementById('mouse-simulator');
+
+        naoButton.addEventListener('mouseover', () => {
+            naoButton.textContent = 'Sim';
+            naoButton.style.backgroundColor = '#28a745'; // Verde
+        });
+
+        naoButton.addEventListener('mouseleave', () => {
+            naoButton.textContent = 'Não';
+            naoButton.style.backgroundColor = '#dc3545'; // Vermelho
+        });
+
+        naoButton.addEventListener('click', () => {});
+
+        document.getElementById('sim').addEventListener('click', () => {
+            imagePopup.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        instagramLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        confirmButton.addEventListener('click', () => {
+            window.open('https://www.instagram.com', '_blank');
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        overlay.addEventListener('click', () => {
+            popup.style.display = 'none';
+            imagePopup.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        // Detecta se o usuário está em um dispositivo móvel
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+            mouseSimulator.style.display = 'block';
+
+            document.addEventListener('mousemove', (e) => {
+                mouseSimulator.style.left = `${e.clientX + 10}px`;
+                mouseSimulator.style.top = `${e.clientY + 10}px`;
+            });
+        }
+    </script>
+</body>
+</html>
