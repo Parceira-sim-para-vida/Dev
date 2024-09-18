@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sim ou Não</title>
     <style>
-        /* Seus estilos existentes */
         body {
             display: flex;
             flex-direction: column;
@@ -145,11 +143,11 @@
         }
 
         #change-image1 {
-            background-color: black; /* Azul */
+            background-color: black; 
         }
 
         #change-image2 {
-            background-color: black; /* Amarelo */
+            background-color: black; 
         }
 
         .custom-cursor {
@@ -191,16 +189,14 @@
             }
         }
         
-      
-   #instagram-link {
-        text-decoration: none; /* Remove o sublinhado do link */
-    }
-    #instagram-handle {
-        font-weight: bold;
-        color: #0095f6; /* Cor típica dos links do Instagram */
-    }
+        #instagram-link {
+            text-decoration: none;  
+        }
 
-
+        #instagram-handle {
+            font-weight: bold;
+            color: #0095f6; 
+        }
     </style>
 </head>
 <body>
@@ -229,20 +225,19 @@
         <div>
             <button id="change-image1">NEGATIVO</button>
             <button id="change-image2">POSITIVO</button>
-    <center>
-    <p>
-        Segue no Insta 
-        <a id="instagram-link" href="https://www.instagram.com/clipsbyte?igsh=ejNqd2Z5NnQ3c2ht" target="_blank">
-            <span id="instagram-handle">@clipbyte</span>
-        </a> 
-        para mais projetos
-    </p>
-</
-center>
-
-
-</div>
+            <center>
+                <p>
+                    Segue no Insta 
+                    <a id="instagram-link" href="https://www.instagram.com/clipsbyte?igsh=ejNqd2Z5NnQ3c2ht" target="_blank">
+                        <span id="instagram-handle">@clipbyte</span>
+                    </a> 
+                    para mais projetos
+                </p>
+            </center>
+        </div>
     </div>
+
+    <audio id="audio" src="https://www.myinstants.com/media/sounds/tu-eh-gayy-man.mp3" preload="auto"></audio>
 
     <div class="custom-cursor" id="custom-cursor"></div>
 
@@ -264,6 +259,7 @@ center>
         const touchArea = document.getElementById('touch-area');
         const changeImage1 = document.getElementById('change-image1');
         const changeImage2 = document.getElementById('change-image2');
+        const audio = document.getElementById('audio');
 
         function updateButtonState(x, y) {
             const naoRect = naoButton.getBoundingClientRect();
@@ -272,9 +268,10 @@ center>
                 naoButton.textContent = 'Sim';
                 naoButton.style.backgroundColor = '#28a745';
             } else if (x >= simRect.left && x <= simRect.right && y >= simRect.top && y <= simRect.bottom) {
-                simButton.style.backgroundColor = '#218838'; // Tom mais escuro de verde
+                simButton.style.backgroundColor = '#218838'; 
                 imagePopup.style.display = 'block';
                 overlay.style.display = 'block';
+                audio.play();
             } else {
                 naoButton.textContent = 'Não';
                 naoButton.style.backgroundColor = '#dc3545';
@@ -299,13 +296,12 @@ center>
             updateCursorPosition(cursorX, cursorY);
         });
 
-        naoButton.addEventListener('click', () => {
-            // Adicione a funcionalidade desejada para o botão "Não"
-        });
+        naoButton.addEventListener('click', () => {});
 
         simButton.addEventListener('click', () => {
             imagePopup.style.display = 'block';
             overlay.style.display = 'block';
+            audio.play();
         });
 
         instagramLink.addEventListener('click', (e) => {
@@ -361,11 +357,6 @@ center>
         } else {
             touchpad.style.display = 'none';
         }
-        
-        
-       
-   
-       </script>
+    </script>
 </body>
 </html>
-    
